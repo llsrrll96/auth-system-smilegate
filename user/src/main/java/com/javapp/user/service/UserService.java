@@ -1,13 +1,14 @@
 package com.javapp.user.service;
 
-import com.javapp.user.dto.UserDto;
-import com.javapp.user.entity.User;
+import com.javapp.user.dto.user.SignUpDto;
+import com.javapp.user.dto.user.UserDto;
+import com.javapp.user.entity.user.User;
 
 import java.util.List;
 
 public interface UserService {
     // c
-    UserDto createUser(User user);
+    UserDto createUser(SignUpDto signUpDto);
 
     // r
     List<UserDto> findByUsers();
