@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +32,23 @@ public class UserServiceImpl implements UserService{
                 .username(signUpDto.getUsername())
                 .email(signUpDto.getEmail())
                 .password(signUpDto.getPassword())
-                .role(Role.ROLE_USER)
+                .role(Role.ROLE_USER.getType())
                 .build();
+    }
+
+    private UserDto mapToUserDto(User user){
+        return new UserDto(user);
     }
 
     @Override
     public List<UserDto> findByUsers() {
-        userJpaRepository.findAll();
-        return null;
+        List<User> list = userJpaRepository.findAll();
+        return list.stream().map(l-> mapToUserDto(l)).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto findUserDetail(Long userId) {
+        return new UserDto(userJpaRepository.findById(userId).get());
     }
 
     @Override
