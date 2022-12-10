@@ -1,10 +1,10 @@
 package com.javapp.user.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.javapp.user.entity.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
 import javax.persistence.*;
 
@@ -28,13 +28,13 @@ public class User extends BaseTimeEntity {
     private Boolean emailVerified = false;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String role;
 
     @Builder
-    public User(Long userId, String email, String username, String password, Role role){
+    public User(Long userId, String email, String username, String password, String role){
         this.userId = userId;
         this.email = email;
         this.username = username;
