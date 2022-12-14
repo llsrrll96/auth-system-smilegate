@@ -1,7 +1,7 @@
-package com.javapp.user.dto.user;
+package com.javapp.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.javapp.user.entity.user.User;
+import com.javapp.auth.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
