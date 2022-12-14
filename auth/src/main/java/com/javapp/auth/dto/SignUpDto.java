@@ -1,4 +1,4 @@
-package com.javapp.user.dto.user;
+package com.javapp.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
