@@ -38,7 +38,7 @@ public class JwtTokenProvider {
         payloads.put("username",user.getUsername());
         payloads.put("role",user.getRole());
 
-        Date expireDate = createExprieDate(jwtExpirationInMs);
+        Date expireDate = createExpireDate(jwtExpirationInMs);
 
         Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
         return Jwts.builder()
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
         payloads.put("username",user.getUsername());
         payloads.put("role",user.getRole());
 
-        Date expireDate = createExprieDate(refreshExpirationInMs);
+        Date expireDate = createExpireDate(refreshExpirationInMs);
 
         Key key= Keys.hmacShaKeyFor(refreshSecret.getBytes());
         return Jwts.builder()
@@ -70,7 +70,7 @@ public class JwtTokenProvider {
     }
 
 
-    private Date createExprieDate(long expirationInMs){
+    private Date createExpireDate(long expirationInMs){
         long expireTime = new Date().getTime() + expirationInMs;
         return new Date(expireTime);
     }
