@@ -8,8 +8,9 @@ import com.javapp.auth.dto.SignUpDto;
 import com.javapp.auth.dto.UserDto;
 import com.javapp.auth.exception.UserNotFoundException;
 import com.javapp.auth.security.jwt.JwtAuthResponse;
-import com.javapp.auth.security.jwt.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.javapp.auth.security.jwt.models.Token;
+import com.javapp.auth.security.jwt.repository.TokenJpaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,17 +18,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
+@RequiredArgsConstructor
 @Service
 public class SignServiceImpl implements SignService{
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private AuthJpaRepository authJpaRepository;
-    @Autowired
-    private JwtTokenProvider tokenProvider;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
+    private final AuthJpaRepository authJpaRepository;
+    private final TokenJpaRepository tokenJpaRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public User findById(Long userId){
@@ -55,6 +57,7 @@ public class SignServiceImpl implements SignService{
         return authJpaRepository.existsByEmail(email);
     }
 
+    @Transactional
     @Override
     public JwtAuthResponse siginIn(JwtRequestDto jwtRequestDto) {
         User user = validateIdAndPasswordForSignIn(jwtRequestDto);
@@ -64,9 +67,21 @@ public class SignServiceImpl implements SignService{
         ));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        System.out.println("토큰 생성");
-        String accessToken = tokenProvider.generateToken(user);
-        String refreshToken = tokenProvider.generateRefreshToken(user);
+        Token token = authService.generateATandRT(user);
+        String accessToken = token.getAccessToken();
+        String refreshToken = token.getRefreshToken();
+
+        // delete previous row
+        tokenJpaRepository.deleteByUser(user);
+
+        // save to token table
+        Token usertoken = Token.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .generateAtDateTime(LocalDateTime.now())
+                .user(user)
+                .build();
+        tokenJpaRepository.save(usertoken);
 
         return JwtAuthResponse.builder()
                 .accessToken(accessToken)
