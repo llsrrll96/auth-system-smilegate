@@ -35,10 +35,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             String token = jwtUtils.getJwtFromRequestHeader(exchange.getRequest());
 
             if(token != null) {
-                System.out.println("api,token: " + token);
-                // jwt 를 헤더에 담아 서비스에 담아주는게 나은지
-                // api server에서 userId로 헤더에 담아 요청하는게 나은지
-
                 // 토큰 유효성 검증
                 TokenUser tokenUser = jwtUtils.getUserFromJwt(token);
 
