@@ -4,11 +4,11 @@ import com.javapp.auth.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity(name = "token")
 public class Token {
     @Id
