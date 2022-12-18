@@ -36,7 +36,7 @@ public class JwtTokenProvider {
         payloads.put("userId", user.getUserId());
 //        payloads.put("email",user.getEmail());
 //        payloads.put("username",user.getUsername());
-        payloads.put("role",user.getRole());
+//        payloads.put("role",user.getRole());
 
         Date expireDate = createExpireDate(jwtExpirationInMs);
 
@@ -55,7 +55,7 @@ public class JwtTokenProvider {
         payloads.put("userId", user.getUserId());
 //        payloads.put("email",user.getEmail());
 //        payloads.put("username",user.getUsername());
-        payloads.put("role",user.getRole());
+//        payloads.put("role",user.getRole());
 
         Date expireDate = createExpireDate(refreshExpirationInMs);
 
