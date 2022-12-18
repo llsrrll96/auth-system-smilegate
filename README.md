@@ -3,7 +3,7 @@
 <br>
 
 ## 프로젝트 목표
-* Micro Service Architecture를 적용한 서비스를 설계하고 구현
+* MicroService Architecture를 적용한 서비스를 설계하고 구현
 * Auth-Server(인증서버), User-Server(유저서버) 나누어 구축
 * JWT 토큰 방식 로그인 (Access Token, Refresh Token 으로 로그인 유지와 재로그인 요청)
 <br>
@@ -28,6 +28,7 @@
   * 기존에는 인증서버, 유저서버에서 JWT 디코딩 기능을 각각 구현했어야함
   * JWT를 디코딩하여 유저 정보(유저Id와 Role)를 각 서비스 헤더를 통해 전달
   * AuthorizationHeaderFilter 를 통해 JWT 검증
+   * ex) http://localhost:8765/user/api/v1/user/users (Gateway 서버를 통한 요청) -> AuthorizationHeaderFilter 에서 jwt 검증
   
 ### Eureka Server
 * 로드밸런싱을 통해 부하 분산
