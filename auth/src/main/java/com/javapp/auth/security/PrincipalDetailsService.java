@@ -2,9 +2,9 @@ package com.javapp.auth.security;
 
 import com.javapp.auth.domain.User;
 import com.javapp.auth.domain.repository.UserJpaRepository;
+import com.javapp.auth.exception.ErrorCode;
 import com.javapp.auth.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +23,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 
         User user = userJpaRepository.findById(Long.parseLong(userId))
-                .orElseThrow(()->new UserNotFoundException("유저 정보 없음", HttpStatus.NOT_FOUND));
+                .orElseThrow(()->new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         return new PrincipalDetails(user);
     }
