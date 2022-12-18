@@ -40,7 +40,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                 // api server에서 userId로 헤더에 담아 요청하는게 나은지
 
                 // 토큰 유효성 검증
-                // feign 을 통해 인증서비스에 요청
                 TokenUser tokenUser = jwtUtils.getUserFromJwt(token);
 
                 // 토큰 유효성 검증 후

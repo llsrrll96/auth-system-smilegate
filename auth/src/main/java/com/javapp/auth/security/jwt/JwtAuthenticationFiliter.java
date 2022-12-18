@@ -28,11 +28,9 @@ public class JwtAuthenticationFiliter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.getJwtFromRequestHeader(request);
-        System.out.println("doFilterInternal, "+token);
 
         // token validation
         if(StringUtils.hasText(token) && jwtTokenProvider.validateJwtoken(token)){
-            System.out.println("검증 성공");
             Map<String, Object> userInfo = jwtTokenProvider.getUserFromJwt(token);
             UserDetails userDetails = principalDetailsService.loadUserByUsername((String)userInfo.get("userId"));
 
