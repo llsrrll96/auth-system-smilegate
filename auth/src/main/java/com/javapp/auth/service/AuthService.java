@@ -6,10 +6,12 @@ import com.javapp.auth.security.jwt.JwtAuthResponse;
 import com.javapp.auth.security.jwt.models.Token;
 
 public interface AuthService {
-
+    Token generateAT(User user);
     Token generateATandRT(User user);
 
     JwtAuthResponse refreshToken(RefreshJwtDto refreshJwtDto);
+
+    boolean deleteToken(RefreshJwtDto refreshJwtDto);
 
     // RT 확인후 AT 만 재발급
 
