@@ -2,7 +2,7 @@ package com.javapp.auth.service;
 
 import com.javapp.auth.domain.Role;
 import com.javapp.auth.domain.User;
-import com.javapp.auth.domain.repository.AuthJpaRepository;
+import com.javapp.auth.domain.repository.UserJpaRepository;
 import com.javapp.auth.dto.JwtRequestDto;
 import com.javapp.auth.dto.SignUpDto;
 import com.javapp.auth.dto.UserDto;
@@ -27,13 +27,13 @@ import java.time.LocalDateTime;
 public class SignServiceImpl implements SignService{
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
-    private final AuthJpaRepository authJpaRepository;
+    private final UserJpaRepository userJpaRepository;
     private final TokenJpaRepository tokenJpaRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public User findById(Long userId){
-        return authJpaRepository.findById(userId).orElseThrow(
+        return userJpaRepository.findById(userId).orElseThrow(
                 ()-> new UserNotFoundException("유저 없음", HttpStatus.NOT_FOUND));
     }
 
@@ -49,12 +49,12 @@ public class SignServiceImpl implements SignService{
                 .role(Role.ROLE_USER.getType())
                 .build();
 
-        return new UserDto(authJpaRepository.save(user));
+        return new UserDto(userJpaRepository.save(user));
     }
 
     @Override
     public boolean existByEmail(String email) {
-        return authJpaRepository.existsByEmail(email);
+        return userJpaRepository.existsByEmail(email);
     }
 
     @Transactional
@@ -71,18 +71,6 @@ public class SignServiceImpl implements SignService{
         String accessToken = token.getAccessToken();
         String refreshToken = token.getRefreshToken();
 
-        // delete previous row
-        tokenJpaRepository.deleteByUser(user);
-
-        // save to token table
-        Token usertoken = Token.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .generateAtDateTime(LocalDateTime.now())
-                .user(user)
-                .build();
-        tokenJpaRepository.save(usertoken);
-
         return JwtAuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -90,7 +78,7 @@ public class SignServiceImpl implements SignService{
     }
 
     private User validateIdAndPasswordForSignIn(JwtRequestDto jwtRequestDto) {
-        User user = authJpaRepository.findByEmail(jwtRequestDto.getEmail()).orElseThrow(
+        User user = userJpaRepository.findByEmail(jwtRequestDto.getEmail()).orElseThrow(
                 ()->new UserNotFoundException("아이디 또는 비밀번호를 잘못 입력했습니다.",HttpStatus.NOT_FOUND)
         );
         // validate password
