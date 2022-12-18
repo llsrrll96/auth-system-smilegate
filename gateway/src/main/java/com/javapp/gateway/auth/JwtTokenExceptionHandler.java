@@ -22,7 +22,8 @@ public class JwtTokenExceptionHandler implements ErrorWebExceptionHandler {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private String getErrorCode(String error, Map<String, String> requestLoginMap) {
+    private String getErrorCode(String errorCode, Map<String, String> requestLoginMap) {
+        String error = errorCode;
         try{
             error = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestLoginMap);
         } catch (JsonProcessingException e) {
@@ -50,7 +51,7 @@ public class JwtTokenExceptionHandler implements ErrorWebExceptionHandler {
         String statusCode = Objects.requireNonNull(response.getStatusCode()).toString();
         if(statusCode.split(" ").length == 2){
             requestLoginMap.put("status", response.getStatusCode().toString().split(" ")[0]);
-            requestLoginMap.put("message","requestLogin");
+            requestLoginMap.put("message","requestLoginExtension");
         }
 
         String error = "Gateway Error";
