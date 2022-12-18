@@ -31,12 +31,12 @@ public class JwtTokenProvider {
     @Value("${app.refresh-expiration-milliseconds}")
     private int refreshExpirationInMs;
 
-    public String generateToken(User user){
+    public String generateAccessToken(User user){
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("userId", user.getUserId());
-        payloads.put("email",user.getEmail());
-        payloads.put("username",user.getUsername());
-        payloads.put("role",user.getRole());
+//        payloads.put("email",user.getEmail());
+//        payloads.put("username",user.getUsername());
+//        payloads.put("role",user.getRole());
 
         Date expireDate = createExpireDate(jwtExpirationInMs);
 
@@ -53,9 +53,9 @@ public class JwtTokenProvider {
     public String generateRefreshToken(User user){
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("userId", user.getUserId());
-        payloads.put("email",user.getEmail());
-        payloads.put("username",user.getUsername());
-        payloads.put("role",user.getRole());
+//        payloads.put("email",user.getEmail());
+//        payloads.put("username",user.getUsername());
+//        payloads.put("role",user.getRole());
 
         Date expireDate = createExpireDate(refreshExpirationInMs);
 
@@ -115,8 +115,7 @@ public class JwtTokenProvider {
             log.error("Invalid JWT token");
             throw new CustomAPIException(HttpStatus.BAD_GATEWAY, "Invalid JWT token");
         }catch(ExpiredJwtException ex) {
-            log.error("Expired JWT token");
-            throw new CustomAPIException(HttpStatus.BAD_GATEWAY, "Expired JWT token");
+            return false;
         }catch(UnsupportedJwtException ex) {
             log.error("Unsupported JWT token");
             throw new CustomAPIException(HttpStatus.BAD_GATEWAY, "Unsupported JWT token");
