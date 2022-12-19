@@ -23,7 +23,11 @@
   * JPA
   * MySql
   
-<img src="https://user-images.githubusercontent.com/58140426/208300885-65bd9767-1d04-4de1-bbe1-24da9dec987d.png"  width="700" height="370">
+<img src="https://user-images.githubusercontent.com/58140426/208329449-a858e264-2152-4ea7-a672-ab97aede7c50.png"  width="700" height="auth">
+
+## ER-Diagram
+<img src="https://user-images.githubusercontent.com/58140426/208329559-0388efe3-b266-4bb3-8004-8a91cb887edb.png"  width="300" height="auth">
+
 
 ## Microservices
 ### Spring Cloud Gateway
