@@ -2,6 +2,9 @@
 스마일게이트 윈터데브캠프 개인프로젝트  <br>
 <br>
 
+## 질문 목록 !
+질문목록 노션링크 [질문목록 노션링크](https://lopsided-emperor-206.notion.site/Q-4aa987383dd84c22a59b0758b20a428b)
+
 ## 프로젝트 목표
 * MicroService Architecture를 적용한 서비스를 설계하고 구현
 * Auth-Server(인증서버), User-Server(유저서버) 나누어 구축
@@ -60,5 +63,3 @@
 * Config 서버를 통해 applicaiton 설정 파일 private git 레포지토리를 통해 
 <br>
 
-## 질문 목록 !
-질문목록 노션링크 [질문목록 노션링크](https://lopsided-emperor-206.notion.site/Q-4aa987383dd84c22a59b0758b20a428b)
