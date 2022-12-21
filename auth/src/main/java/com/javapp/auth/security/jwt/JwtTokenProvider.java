@@ -85,6 +85,16 @@ public class JwtTokenProvider {
         claimMap = claims;
         return claimMap;
     }
+    public Map<String, Object> getUserFromRefreshToken(String token){
+        Map<String, Object> claimMap = null;
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(refreshSecret.getBytes()))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        claimMap = claims;
+        return claimMap;
+    }
 
     public String getJwtFromRequestHeader(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");

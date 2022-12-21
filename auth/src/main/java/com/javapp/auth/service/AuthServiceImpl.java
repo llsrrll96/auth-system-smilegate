@@ -4,7 +4,8 @@ import com.javapp.auth.domain.User;
 import com.javapp.auth.domain.repository.UserJpaRepository;
 import com.javapp.auth.dto.RefreshJwtDto;
 import com.javapp.auth.exception.ErrorCode;
-import com.javapp.auth.exception.TokenNotFoundException;
+import com.javapp.auth.exception.TokenException;
+import com.javapp.auth.exception.UserNotFoundException;
 import com.javapp.auth.security.jwt.JwtAuthResponse;
 import com.javapp.auth.security.jwt.JwtTokenProvider;
 import com.javapp.auth.security.jwt.models.Token;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -23,22 +25,10 @@ public class AuthServiceImpl implements AuthService{
     private final TokenJpaRepository tokenJpaRepository;
     private final JwtTokenProvider tokenProvider;
 
-    @Override
-    public Token generateAT(User user) {
-        String accessToken = tokenProvider.generateAccessToken(user);
-
-        Token userToken = Token.builder()
-                .accessToken(accessToken)
-                .generateAtDateTime(LocalDateTime.now())
-                .user(user)
-                .build();
-
-        return userToken;
-    }
 
     @Transactional
     @Override
-    public Token generateATandRT(User user) {
+    public JwtAuthResponse generateATandRT(User user) {
         String accessToken = tokenProvider.generateAccessToken(user);
         String refreshToken = tokenProvider.generateRefreshToken(user);
 
@@ -47,50 +37,45 @@ public class AuthServiceImpl implements AuthService{
 
         // save to token table
         Token userToken = Token.builder()
-                .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .generateAtDateTime(LocalDateTime.now())
                 .user(user)
                 .build();
         tokenJpaRepository.save(userToken);
 
-        return Token.builder()
+        return JwtAuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .generateAtDateTime(LocalDateTime.now())
                 .build();
     }
 
     @Transactional
     @Override
     public JwtAuthResponse refreshToken(RefreshJwtDto refreshJwtDto) {
-        // RT 만료 확인 후 AT 재발급 else AT RT 재발급
-        Token token = tokenJpaRepository.findByAccessToken(refreshJwtDto.getAccessToken()).orElseThrow(
-                () -> new TokenNotFoundException(ErrorCode.TOKEN_IS_NOT_FOUND)
-        );
-        boolean isValidToken = tokenProvider.validateRefreshToken(token.getRefreshToken());
+        // RT 만료 확인 후 AT RT 재발급
 
-        Token newToken = null;
+        boolean isValidToken = tokenProvider.validateRefreshToken(refreshJwtDto.getRefreshToken());
+
         if(isValidToken){
-            //AT
-            newToken = generateAT(token.getUser());
-            newToken.setRefreshToken(token.getRefreshToken());
+            // AT 재발급
+            Map<String, Object> userMap = tokenProvider.getUserFromRefreshToken(refreshJwtDto.getRefreshToken());
+            Long userId = Long.valueOf(userMap.get("userId").toString());
+            User user = userJpaRepository.findById(userId).orElseThrow(
+                    ()->new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
+            );
 
-            token.setAccessToken(newToken.getAccessToken());
+            return generateATandRT(user);
+
         }else{
-            newToken = generateATandRT(token.getUser());
+            throw new TokenException(ErrorCode.REFRESHTOKEN_EXPIRATION);
         }
 
-        return JwtAuthResponse.builder()
-                .accessToken(newToken.getAccessToken())
-                .refreshToken(newToken.getRefreshToken())
-                .build();
     }
 
     @Transactional
     @Override
     public boolean deleteToken(RefreshJwtDto refreshJwtDto) {
-        tokenJpaRepository.deleteByAccessToken(refreshJwtDto.getAccessToken());
+        tokenJpaRepository.deleteByRefreshToken(refreshJwtDto.getRefreshToken());
         return true;
     }
 }

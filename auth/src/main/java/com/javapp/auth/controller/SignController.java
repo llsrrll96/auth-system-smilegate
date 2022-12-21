@@ -1,6 +1,5 @@
 package com.javapp.auth.controller;
 
-import com.javapp.auth.domain.User;
 import com.javapp.auth.dto.JwtRequestDto;
 import com.javapp.auth.dto.SignUpDto;
 import com.javapp.auth.dto.UserDto;
@@ -29,10 +28,10 @@ public class SignController {
         return new ResponseEntity<>(signService.siginIn(jwtRequestDto), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{userId}")
-    public User findById(@PathVariable Long userId){
-        return signService.findById(userId);
-    }
+//    @GetMapping("/user/{userId}")
+//    public User findById(@PathVariable Long userId){
+//        return signService.findById(userId);
+//    }
 
     @GetMapping("/existby/{email}")
     public ResponseEntity<Boolean> existByEmail(@PathVariable String email){

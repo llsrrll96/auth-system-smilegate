@@ -11,8 +11,8 @@ import java.util.Date;
 
 @ControllerAdvice
 public class GlobalResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(TokenNotFoundException.class)
-    public ResponseEntity<ErrorDetails> handleTokenNotFoundException(TokenNotFoundException exception, WebRequest webRequest){
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<ErrorDetails> handleTokenNotFoundException(TokenException exception, WebRequest webRequest){
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getStatus(),exception.getCode(),exception.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND );
     }

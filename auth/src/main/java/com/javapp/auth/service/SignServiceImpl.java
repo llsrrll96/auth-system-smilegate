@@ -9,7 +9,6 @@ import com.javapp.auth.dto.UserDto;
 import com.javapp.auth.exception.ErrorCode;
 import com.javapp.auth.exception.UserNotFoundException;
 import com.javapp.auth.security.jwt.JwtAuthResponse;
-import com.javapp.auth.security.jwt.models.Token;
 import com.javapp.auth.security.jwt.repository.TokenJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +26,6 @@ public class SignServiceImpl implements SignService{
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
     private final UserJpaRepository userJpaRepository;
-    private final TokenJpaRepository tokenJpaRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -66,14 +64,7 @@ public class SignServiceImpl implements SignService{
         ));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Token token = authService.generateATandRT(user);
-        String accessToken = token.getAccessToken();
-        String refreshToken = token.getRefreshToken();
-
-        return JwtAuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        return authService.generateATandRT(user);
     }
 
     private User validateIdAndPasswordForSignIn(JwtRequestDto jwtRequestDto) {
