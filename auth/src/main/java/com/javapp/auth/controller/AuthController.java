@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -23,7 +22,6 @@ public class AuthController {
         JwtAuthResponse jwtAuthResponse = authService.refreshToken(refreshJwtDto);
         return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
     }
-
 
     // 로그인 유지 X
     // RT 만료 시키기(로그아웃)

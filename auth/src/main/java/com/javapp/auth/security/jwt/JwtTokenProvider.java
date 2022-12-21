@@ -3,6 +3,8 @@ package com.javapp.auth.security.jwt;
 
 import com.javapp.auth.domain.User;
 import com.javapp.auth.exception.CustomAPIException;
+import com.javapp.auth.exception.ErrorCode;
+import com.javapp.auth.exception.TokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -30,6 +32,14 @@ public class JwtTokenProvider {
     private String refreshSecret;
     @Value("${app.refresh-expiration-milliseconds}")
     private int refreshExpirationInMs;
+
+    public int getJwtExpirationInMs() {
+        return jwtExpirationInMs;
+    }
+
+    public int getRefreshExpirationInMs() {
+        return refreshExpirationInMs;
+    }
 
     public String generateAccessToken(User user){
         Map<String, Object> payloads = new HashMap<>();
@@ -125,7 +135,7 @@ public class JwtTokenProvider {
             log.error("Invalid JWT token");
             throw new CustomAPIException(HttpStatus.BAD_GATEWAY, "Invalid JWT token");
         }catch(ExpiredJwtException ex) {
-            return false;
+            throw new TokenException(ErrorCode.REFRESHTOKEN_EXPIRATION);
         }catch(UnsupportedJwtException ex) {
             log.error("Unsupported JWT token");
             throw new CustomAPIException(HttpStatus.BAD_GATEWAY, "Unsupported JWT token");

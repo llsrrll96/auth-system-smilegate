@@ -8,13 +8,12 @@ import com.javapp.auth.exception.TokenException;
 import com.javapp.auth.exception.UserNotFoundException;
 import com.javapp.auth.security.jwt.JwtAuthResponse;
 import com.javapp.auth.security.jwt.JwtTokenProvider;
-import com.javapp.auth.security.jwt.models.Token;
-import com.javapp.auth.security.jwt.repository.TokenJpaRepository;
+import com.javapp.auth.service.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
 import java.util.Map;
 
 
@@ -22,9 +21,9 @@ import java.util.Map;
 @Service
 public class AuthServiceImpl implements AuthService{
     private final UserJpaRepository userJpaRepository;
-    private final TokenJpaRepository tokenJpaRepository;
     private final JwtTokenProvider tokenProvider;
 
+    private final RedisUtil redisUtil;
 
     @Transactional
     @Override
@@ -32,16 +31,7 @@ public class AuthServiceImpl implements AuthService{
         String accessToken = tokenProvider.generateAccessToken(user);
         String refreshToken = tokenProvider.generateRefreshToken(user);
 
-        // delete previous row
-        tokenJpaRepository.deleteByUser(user);
-
-        // save to token table
-        Token userToken = Token.builder()
-                .refreshToken(refreshToken)
-                .generateAtDateTime(LocalDateTime.now())
-                .user(user)
-                .build();
-        tokenJpaRepository.save(userToken);
+        redisUtil.setValues(String.valueOf(user.getUserId()),refreshToken, Duration.ofMillis(tokenProvider.getRefreshExpirationInMs()));
 
         return JwtAuthResponse.builder()
                 .accessToken(accessToken)
@@ -53,13 +43,15 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public JwtAuthResponse refreshToken(RefreshJwtDto refreshJwtDto) {
         // RT 만료 확인 후 AT RT 재발급
+        tokenProvider.validateRefreshToken(refreshJwtDto.getRefreshToken());
 
-        boolean isValidToken = tokenProvider.validateRefreshToken(refreshJwtDto.getRefreshToken());
+        Map<String, Object> userMap = tokenProvider.getUserFromRefreshToken(refreshJwtDto.getRefreshToken());
+        Long userId = Long.valueOf(userMap.get("userId").toString());
+        // 레디스 확인
+        String tokenInRedis = redisUtil.getValues(String.valueOf(userId));
 
-        if(isValidToken){
+        if(tokenInRedis != null){
             // AT 재발급
-            Map<String, Object> userMap = tokenProvider.getUserFromRefreshToken(refreshJwtDto.getRefreshToken());
-            Long userId = Long.valueOf(userMap.get("userId").toString());
             User user = userJpaRepository.findById(userId).orElseThrow(
                     ()->new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
             );
@@ -75,7 +67,8 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     @Override
     public boolean deleteToken(RefreshJwtDto refreshJwtDto) {
-        tokenJpaRepository.deleteByRefreshToken(refreshJwtDto.getRefreshToken());
+        String userId = tokenProvider.getUserFromRefreshToken(refreshJwtDto.getRefreshToken()).get("userId").toString();
+        redisUtil.deleteValues(userId);
         return true;
     }
 }
