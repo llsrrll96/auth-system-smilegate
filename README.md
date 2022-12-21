@@ -2,6 +2,9 @@
 스마일게이트 윈터데브캠프 개인프로젝트  <br>
 <br>
 
+## 질문 목록 !
+질문목록 노션링크 [질문목록 노션링크](https://lopsided-emperor-206.notion.site/Q-4aa987383dd84c22a59b0758b20a428b)
+
 ## 프로젝트 목표
 * MicroService Architecture를 적용한 서비스를 설계하고 구현
 * Auth-Server(인증서버), User-Server(유저서버) 나누어 구축
@@ -20,7 +23,11 @@
   * JPA
   * MySql
   
-<img src="https://user-images.githubusercontent.com/58140426/208300885-65bd9767-1d04-4de1-bbe1-24da9dec987d.png"  width="700" height="370">
+<img src="https://user-images.githubusercontent.com/58140426/208329449-a858e264-2152-4ea7-a672-ab97aede7c50.png"  width="700" height="auth">
+
+## ER-Diagram
+<img src="https://user-images.githubusercontent.com/58140426/208329559-0388efe3-b266-4bb3-8004-8a91cb887edb.png"  width="300" height="auth">
+
 
 ## Microservices
 ### Spring Cloud Gateway
@@ -60,5 +67,3 @@
 * Config 서버를 통해 applicaiton 설정 파일 private git 레포지토리를 통해 
 <br>
 
-## 질문 목록 !
-질문목록 노션링크 [질문목록 노션링크](https://lopsided-emperor-206.notion.site/Q-4aa987383dd84c22a59b0758b20a428b)
