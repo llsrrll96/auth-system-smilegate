@@ -23,7 +23,7 @@
   * JPA
   * MySql
   
-<img src="https://user-images.githubusercontent.com/58140426/208329449-a858e264-2152-4ea7-a672-ab97aede7c50.png"  width="700" height="auth">
+<img src="https://user-images.githubusercontent.com/58140426/208836599-a58b19df-c1ab-4dd6-a095-bdb64ba1158a.png"  width="700" height="auth">
 
 ## ER-Diagram
 <img src="https://user-images.githubusercontent.com/58140426/208329559-0388efe3-b266-4bb3-8004-8a91cb887edb.png"  width="300" height="auth">
