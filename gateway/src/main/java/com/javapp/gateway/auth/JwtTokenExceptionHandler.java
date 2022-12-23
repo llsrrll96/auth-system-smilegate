@@ -2,7 +2,6 @@ package com.javapp.gateway.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -41,17 +40,26 @@ public class JwtTokenExceptionHandler implements ErrorWebExceptionHandler {
             return Mono.error(ex);
         }
 
+        Map<String ,String> requestLoginMap = new HashMap<>();
+
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         if(ex instanceof ResponseStatusException){
             response.setStatusCode(((ResponseStatusException) ex).getStatus());
         }
-
-        Map<String ,String> requestLoginMap = new HashMap<>();
-        // statusCode : 200 OK
-        String statusCode = Objects.requireNonNull(response.getStatusCode()).toString();
-        if(statusCode.split(" ").length == 2){
-            requestLoginMap.put("status", response.getStatusCode().toString().split(" ")[0]);
-            requestLoginMap.put("message","requestLoginExtension");
+        else if(ex instanceof NullPointerException){
+            String statusCode = Objects.requireNonNull(response.getStatusCode()).toString();
+            if(statusCode.split(" ").length == 2){
+                requestLoginMap.put("status", response.getStatusCode().toString().split(" ")[0]);
+                requestLoginMap.put("message","requestLogin");
+            }
+        }
+        else{
+            // statusCode : 200 OK
+            String statusCode = Objects.requireNonNull(response.getStatusCode()).toString();
+            if(statusCode.split(" ").length == 2){
+                requestLoginMap.put("status", response.getStatusCode().toString().split(" ")[0]);
+                requestLoginMap.put("message","requestLoginExtension");
+            }
         }
 
         String error = "Gateway Error";

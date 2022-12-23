@@ -49,7 +49,7 @@ public class JwtUtils implements InitializingBean {
             }
             return null;
         }catch (NullPointerException e){
-            return null;
+            throw new NullPointerException(e.getMessage());
         }
     }
 
