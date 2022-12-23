@@ -28,7 +28,21 @@ spring:
           filters:
             - RewritePath=/auth/(?<path>.*),/$\{path}
 
-
+      # CORS
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allow-credentials: true
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+            allowedHeaders: '*'
 # jwt
 app.jwt-secret: zd0RObpHNTie25ScIK1BbSYIDwwpXq6wD7osjNa6HslJxdVgYXR9PQSsmoSjOZQs7eUq25wJyRs55om3ledb45ErtxLiwBKDPF3RKAAjs3pxrLANZNY4TDvmagEHSplH4ozPZa8rdxYFjzsinrnh5SDf9iW1IhJNGiCGtL7Hj6mCGPV4hilmbZBkiym0Q5NwoqcRckyvqV87K3b2mwoxwZROyeOokCVI37Afs9LS4T0PWbSiIgQegI2OWRcgu8ZxfzNHIyANrADoMvHuMxJ2fMRbE4s8crGr0u9J2KxulbS8HzDt7mvm8nyMr0VDrC5s6eb8ZJClUvtB565ctBzBY7op8k2zW713mdclWOGRkasqgyCJ9cl7jKws5z12G352hhoe655qfyQw6tgfFCmZmTrrstu8wzbOQA2WF7nVFerMHI1nkonGhO8JiCSPc4D2EFZkNnfsBHejpgGJE4qVSzFacyZoCDrhirB5OQypyNIX4pHIt8EmHjxUSxjuaKLt
 
@@ -50,3 +64,4 @@ management:
   endpoint:
     gateway:
       enabled: true
+
