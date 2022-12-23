@@ -2,6 +2,8 @@ package com.javapp.user.service;
 
 import com.javapp.user.dto.user.UserDto;
 import com.javapp.user.entity.user.User;
+import com.javapp.user.exception.ErrorCode;
+import com.javapp.user.exception.UserNotFoundByIdException;
 import com.javapp.user.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto findUserDetail(Long userId) {
-        return new UserDto(userJpaRepository.findById(userId).get());
+        return new UserDto(userJpaRepository.findById(userId).orElseThrow(
+                ()-> new UserNotFoundByIdException(ErrorCode.USER_NOT_FOUND)
+        ));
     }
 
     @Override
