@@ -1,0 +1,54 @@
+.login_main{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    background-image: url(https://cdn.pixabay.com/photo/2020/07/23/17/54/mountain-5431950_960_720.png);
+    background-size: cover;
+    background-attachment: fixed;
+}
+.login_text{
+    position: absolute;
+    top: 50%;
+    left:30%; 
+}
+
+.form_container{
+    position: relative;
+    margin-top: 100px;
+    height: 200px;
+}
+.form_div {
+    width: 200px; 
+    height: 200px; 
+    position: fixed;  
+    top:50%; 
+    left:30%; 
+    margin-left: -100px; 
+    margin-top: -100px;
+}
+
+input{
+    width: 363px;
+    height: 51px;
+    box-sizing: border-box;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+}
+input[id="submit"]{
+    cursor:pointer;
+}
+
+.form_div #email{
+    margin-bottom: 10px;
+    width: 100%;
+}
+.signuptext_div{
+    margin-top: 10px;
+    height: 10px;
+}
+.form_div #submit{
+    margin-top: 10px;
+    background: #04C45C;
+    color: white;
+}

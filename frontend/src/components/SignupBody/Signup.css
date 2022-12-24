@@ -1,0 +1,99 @@
+.signup_main{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    background-image: url(https://cdn.pixabay.com/photo/2020/07/23/17/54/mountain-5431950_960_720.png);
+    background-size: cover;
+    background-attachment: fixed;
+}
+.signup_div{
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 650px;
+    height: 500px;
+    margin-top: 90px;
+    background-color: #FBFBFB;
+    display: flex;
+}
+label{
+    font-size: 12px;
+    color: rgb(48, 48, 48);
+}
+input{
+    border: none;
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    background-color: #FBFBFB;
+    position: relative;
+    padding: 5px;
+}
+input:focus {
+    outline: none !important;
+    border-bottom: 1px solid red;
+    font-size: 14px;
+    font-weight: bold;
+}
+#password:focus{
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+}
+#btn{
+    border: none;
+    background-color: red;
+    border-radius: 20px;
+    padding: 10px;
+    color: white;
+    width: 120px;
+    margin-top: 15px;
+    cursor:pointer;
+}
+p{
+    font-size: small;
+}
+
+
+input[id="email"], input[id="domain"]{
+  width: 100px;
+  
+}
+
+.email_div{
+  display: flex;
+}
+.email_div div{
+  margin-left: auto;
+}
+.email_div p{
+  margin-left: auto;
+}
+
+select.box{
+    border: none;
+    border-bottom: 1px solid lightgray;
+    background-color: #FBFBFB;
+    position: relative;
+    padding: 5px;
+}
+
+
+.password_check_text.invalid p{
+  color: lawngreen;
+}
+
+
+
+@media (min-width: 480px) {
+  .container {
+    padding-inline: 32px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: 48px;
+  }
+}

@@ -1,0 +1,19 @@
+
+ul{
+    text-align: right;
+}
+li{
+    display:inline-block;
+    list-style-type:none;
+}
+a{
+    display:block;
+    padding: 0 8px;
+    text-decoration: none;
+    font-size: 11px;
+    color: #777;
+    line-height: 15px;
+}
+a:hover{
+    font-weight: bold;
+}

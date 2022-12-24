@@ -1,0 +1,10 @@
+.menue_ul{
+    border-top: 1px solid rgb(207, 207, 207);
+    border-bottom: 1px solid rgb(207,207,207);
+    display: flex;
+    list-style-type: none;
+}
+
+.menue_ul li{
+    margin: 20px;
+}
