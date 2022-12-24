@@ -62,8 +62,8 @@
 <br>
 
 ## 기능 추가 예정
-* 토큰 저장을 위한 Redis 추가
-* FE: Fetch API 통해 서버와 통신
+* ~~토큰 저장을 위한 Redis 추가~~
+* ~~FE: Fetch API 통해 서버와 통신~~
 * Config 서버를 통해 applicaiton 설정 파일 private git 레포지토리를 통해 
 <br>
 
