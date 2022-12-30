@@ -1,5 +1,6 @@
 package com.javapp.user.controller;
 
+import com.javapp.user.dto.user.RequestUserDto;
 import com.javapp.user.dto.user.UserDto;
 import com.javapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,12 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> findUsers(){
         return new ResponseEntity<>(userService.findByUsers(),HttpStatus.OK);
+    }
+
+    @PutMapping()
+    public ResponseEntity<UserDto> updateUserDetail(@RequestHeader("X-Authorization-Id") String userId, @RequestBody RequestUserDto requestUserDto){
+        requestUserDto.setUserId(Long.parseLong(userId));
+        System.out.println("userId: "+userId);
+        return new ResponseEntity<>(userService.updateUser(requestUserDto),HttpStatus.OK);
     }
 }
